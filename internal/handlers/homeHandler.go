@@ -10,7 +10,7 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 	h.App.Session.Put(r.Context(), "searchTarget", "home")
 
 	t := templates.Home(&render.Notification{
-		Success: "Sweet! A notification",
+		Success: "Sweet! It's a notification.",
 	})
 	_ = render.Template(w, r, t)
 
