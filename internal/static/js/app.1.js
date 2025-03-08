@@ -38,7 +38,7 @@ function notify(msg, msgType) {
         icon: msgType,
         title: msg,
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
         toast: true
     });
 
