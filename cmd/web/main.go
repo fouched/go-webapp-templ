@@ -8,7 +8,6 @@ import (
 	"github.com/fouched/go-webapp-templ/internal/config"
 	"github.com/fouched/go-webapp-templ/internal/driver"
 	"github.com/fouched/go-webapp-templ/internal/handlers"
-	"github.com/fouched/go-webapp-templ/internal/render"
 	"github.com/jaswdr/faker/v2"
 	"html/template"
 	"log"
@@ -84,7 +83,6 @@ func run() (*driver.DB, error) {
 	// set up handlers and template rendering
 	hc := handlers.NewHandlerConfig(&app)
 	handlers.NewHandlers(hc)
-	render.NewRenderer(&app)
 
 	return db, nil
 }

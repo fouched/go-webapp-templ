@@ -1,0 +1,17 @@
+package templates
+
+import (
+	"github.com/fouched/go-webapp-templ/internal/render"
+)
+
+templ Home(n *render.Notification) {
+    @Layout("Home", n) {
+        <div class="container">
+            <div class="row">
+                <div class="d-flex p-2 justify-content-center">
+                    <h1>Go Web Templ</h1>
+                </div>
+            </div>
+        </div>
+    }
+}

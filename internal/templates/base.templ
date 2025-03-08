@@ -1,0 +1,48 @@
+package templates
+
+import (
+	"github.com/fouched/go-webapp-templ/internal/render"
+)
+
+templ Layout(title string, n *render.Notification) {
+	<!doctype html>
+	<html lang="en">
+	@HtmlHeader("WebApp Templ - " + title)
+	<body>
+	    @NavBar()
+	    <div class="page-content">
+            { children... }
+	    </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="/static/js/app.1.js"></script>
+
+        if n.Success != "" {
+            @templ.JSFuncCall("notify", n.Success, "success")
+        }
+        if n.Warning != "" {
+            @templ.JSFuncCall("notify", n.Warning, "warning")
+        }
+        if n.Error != "" {
+            @templ.JSFuncCall("notify", n.Error, "error")
+        }
+	</body>
+	</html>
+}
+
+templ Pagination(page, pageNum, filter string) {
+    <tr class="text-center">
+        <td colspan="4">
+            <span
+                    hx-target="closest tr"
+                    hx-trigger="intersect once"
+                    hx-swap="outerHTML"
+                    hx-select="tbody > tr"
+                    hx-get={"/" + page + "?pageNum=" + pageNum + "&filter=" + filter}  
+            >
+            Loading More...
+            </span>
+        </td>
+    </tr>
+}

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/fouched/go-webapp-templ/internal/render"
 	"github.com/fouched/go-webapp-templ/internal/services"
 	"net/http"
 	"strings"
@@ -33,9 +32,9 @@ func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["Filter"] = filter
 	stringMap["Page"] = page
-	_ = render.Partial(w, r, page, page+"-search", &render.TemplateData{
-		Data:      data,
-		IntMap:    intMap,
-		StringMap: stringMap,
-	}, page+"-row")
+	//_ = render.Partial(w, r, page, page+"-search", &render.TemplateData{
+	//	Data:      data,
+	//	IntMap:    intMap,
+	//	StringMap: stringMap,
+	//}, page+"-row")
 }

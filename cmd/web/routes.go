@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/fouched/go-webapp-templ/internal/handlers"
-	"github.com/fouched/go-webapp-templ/internal/render"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -18,21 +17,21 @@ func routes() http.Handler {
 	r.Get("/", handlers.Instance.Home)
 	//r.Get("/search", handlers.Instance.Search)
 	//
-	//r.Route("/customer", func(r chi.Router) {
-	//	r.Get("/", handlers.Instance.CustomerGrid)
-	//	r.Get("/{id}", handlers.Instance.CustomerDetails)
-	//	r.Get("/add", handlers.Instance.CustomerAddGet)
-	//	r.Post("/add", handlers.Instance.CustomerAddPost)
-	//	r.Post("/{id}/update", handlers.Instance.CustomerUpdate)
-	//	r.Delete("/{id}", handlers.Instance.CustomerDelete)
-	//})
-
-	// add ability to render static resources
-	r.Handle("/static/*", http.FileServer(http.FS(render.EmbedFS())))
+	r.Route("/customer", func(r chi.Router) {
+		r.Get("/", handlers.Instance.CustomerGrid)
+		//	r.Get("/{id}", handlers.Instance.CustomerDetails)
+		//	r.Get("/add", handlers.Instance.CustomerAddGet)
+		//	r.Post("/add", handlers.Instance.CustomerAddPost)
+		//	r.Post("/{id}/update", handlers.Instance.CustomerUpdate)
+		//	r.Delete("/{id}", handlers.Instance.CustomerDelete)
+	})
 
 	// to externalize above rather use below, and move static files to top level directory of project
-	//fileServer := http.FileServer(http.Dir("./static/"))
-	//r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	fileServer := http.FileServer(http.Dir("./static/"))
+	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+
+	// to rather render embedded static resources
+	//r.Handle("/static/*", http.FileServer(http.FS(render.EmbedFS())))
 
 	return r
 }

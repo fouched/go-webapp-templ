@@ -1,8 +1,8 @@
 package repo
 
 import (
-	"github.com/fouched/go-webapp-template/internal/config"
-	"github.com/fouched/go-webapp-template/internal/models"
+	"github.com/fouched/go-webapp-templ/internal/config"
+	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
 type testCustomerRepo struct {
@@ -15,11 +15,11 @@ func NewTestCustomerRepo(a *config.App) CustomerRepo {
 	}
 }
 
-func (r *testCustomerRepo) SelectCustomerGrid(page int) (*[]models.Customer, error) {
+func (r *testCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
 	return nil, nil
 }
 
-func (r *testCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) (*[]models.Customer, error) {
+func (r *testCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error) {
 	return nil, nil
 }
 

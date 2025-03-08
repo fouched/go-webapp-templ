@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 	"database/sql"
-	"github.com/fouched/go-webapp-template/internal/config"
-	"github.com/fouched/go-webapp-template/internal/models"
+	"github.com/fouched/go-webapp-templ/internal/config"
+	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
 type postgresCustomerRepo struct {
@@ -19,7 +19,7 @@ func NewCustomerRepo(a *config.App) CustomerRepo {
 	}
 }
 
-func (r *postgresCustomerRepo) SelectCustomerGrid(page int) (*[]models.Customer, error) {
+func (r *postgresCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -39,7 +39,7 @@ func (r *postgresCustomerRepo) SelectCustomerGrid(page int) (*[]models.Customer,
 	return getCustomerSlice(rows)
 }
 
-func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) (*[]models.Customer, error) {
+func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter str
 	return getCustomerSlice(rows)
 }
 
-func getCustomerSlice(rows *sql.Rows) (*[]models.Customer, error) {
+func getCustomerSlice(rows *sql.Rows) ([]models.Customer, error) {
 	var customers []models.Customer
 	for rows.Next() {
 		var c models.Customer
@@ -76,7 +76,7 @@ func getCustomerSlice(rows *sql.Rows) (*[]models.Customer, error) {
 		customers = append(customers, c)
 	}
 
-	return &customers, nil
+	return customers, nil
 }
 
 func (r *postgresCustomerRepo) SelectCustomerById(id int64) (*models.Customer, error) {

@@ -5,6 +5,7 @@ import (
 	"github.com/fouched/go-webapp-templ/internal/models"
 	"github.com/fouched/go-webapp-templ/internal/render"
 	"github.com/fouched/go-webapp-templ/internal/services"
+	"github.com/fouched/go-webapp-templ/internal/templates"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
@@ -31,19 +32,8 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := make(map[string]interface{})
-	data["Customers"] = customers
-	intMap := make(map[string]int)
-	intMap["PageNum"] = p
-	stringMap := make(map[string]string)
-	stringMap["Page"] = page
-	stringMap["Filter"] = filter
-
-	_ = render.Template(w, r, "customer", page, &render.TemplateData{
-		Data:      data,
-		IntMap:    intMap,
-		StringMap: stringMap,
-	}, "customer/"+page+"-row", "pagination")
+	t := templates.CustomerGrid(customers, p, filter, &render.Notification{})
+	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
@@ -58,13 +48,13 @@ func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["Customer"] = customer
 
-	_ = render.Partial(w, r, "customer", "customer-details", &render.TemplateData{
-		Data: data,
-	})
+	//_ = render.Partial(w, r, "customer", "customer-details", &render.TemplateData{
+	//	Data: data,
+	//})
 }
 
 func (h *Handlers) CustomerAddGet(w http.ResponseWriter, r *http.Request) {
-	_ = render.Template(w, r, "customer", "customer-add", &render.TemplateData{})
+	//_ = render.Template(w, r, "customer", "customer-add", &render.TemplateData{})
 }
 
 func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
@@ -135,9 +125,9 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 	data["Customer"] = customer
 
 	h.App.Session.Put(r.Context(), "success", customer.Success)
-	_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
-		Data: data,
-	}, "customer-row")
+	//_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
+	//	Data: data,
+	//}, "customer-row")
 
 }
 
@@ -154,12 +144,12 @@ func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 		customer, _ := services.CustomerService(h.App).GetCustomerById(id)
 		data := make(map[string]interface{})
 		data["Customer"] = customer
-		_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
-			Data: data,
-		}, "customer-row")
+		//_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
+		//	Data: data,
+		//}, "customer-row")
 	} else {
 		h.App.Session.Put(r.Context(), "success", "Customer deleted successfully")
-		_ = render.Partial(w, r, "customer", "customer-delete", &render.TemplateData{})
+		//_ = render.Partial(w, r, "customer", "customer-delete", &render.TemplateData{})
 	}
 
 }

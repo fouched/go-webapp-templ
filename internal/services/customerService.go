@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/fouched/go-webapp-template/internal/config"
-	"github.com/fouched/go-webapp-template/internal/models"
-	"github.com/fouched/go-webapp-template/internal/repo"
+	"github.com/fouched/go-webapp-templ/internal/config"
+	"github.com/fouched/go-webapp-templ/internal/models"
+	"github.com/fouched/go-webapp-templ/internal/repo"
 )
 
 var customerService *customerServicer
@@ -24,7 +24,7 @@ func CustomerService(a *config.App) CustomerServicer {
 	return customerService
 }
 
-func (s *customerServicer) GetCustomerGrid(page int, filter string) (*[]models.Customer, error) {
+func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Customer, error) {
 
 	if filter == "" {
 		customers, err := s.Repo.SelectCustomerGrid(page)

@@ -1,0 +1,56 @@
+package templates
+
+templ NavBar() {
+    <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">WebApp</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/">Customers</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Reports
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/reports/1">One</a></li>
+                            <li><a class="dropdown-item" href="/reports/2">Two</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div style="width: 50px"></div>
+                <div class="d-flex flex-nowrap">
+                    <form action="/search" method="get" class="form-inline" hx-push-url="true">
+                        <div class="d-flex">
+                            <input
+                                    id="filter"
+                                    name="filter"
+                                    class="form-control form-control-sm"
+                                    type="search"
+                                    placeholder="Search"
+                                    aria-label="Search"
+                                    hx-get="/search"
+                                    hx-target="#searchResult"
+                                    hx-swap="outerHTML"
+                                    hx-trigger="search, keyup delay:200ms changed"
+                                    hx-push-url="true"
+                            >
+                        </div>
+                    </form>
+                    &nbsp;
+                    <button
+                            class="btn btn-sm btn-success"
+                            hx-get="/search"
+                            hx-target="#searchResult"
+                            hx-swap="outerHTML"
+                            onclick="resetSearch()"
+                    >Clear</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
