@@ -22,14 +22,26 @@ go install github.com/a-h/templ/cmd/templ@latest
 docker-compose up
 ```
 
-### Step 3 : Run the project
+### Step 3: Run database migrations
+Use pop (soda) - a nice tool that is part of the Buffalo framework that can be run on its own. 
+
+See: https://gobuffalo.io/documentation/database/pop/
+
+Install from https://github.com/gobuffalo/pop/releases and add to path.
+
+Run the migration
+```
+soda migrate
+```
+
+### Step 4 : Run the project
 With above installed, at the root of project run:
 ```
 air
 ```
 This will start the web app and auto reload any changes as they are saved.
 
-### Step 4 : Optional - seeding some data
+### Step 5 : Optional - seeding some data
 To create some data uncomment the line in main.go and run the project once.
 
 ## Dependencies
