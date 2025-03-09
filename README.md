@@ -29,6 +29,9 @@ air
 ```
 This will start the web app and auto reload any changes as they are saved.
 
+### Step 4 : Optional - seeding some data
+To create some data uncomment the line in main.go and run the project once.
+
 ## Dependencies
 Added for templ, session management, advanced routing, CORS, Postgres, and faking data
 
