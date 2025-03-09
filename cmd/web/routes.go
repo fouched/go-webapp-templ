@@ -15,8 +15,8 @@ func routes() http.Handler {
 
 	// routes
 	r.Get("/", handlers.Instance.Home)
-	//r.Get("/search", handlers.Instance.Search)
-	//
+	r.Get("/search", handlers.Instance.Search)
+
 	r.Route("/customer", func(r chi.Router) {
 		r.Get("/", handlers.Instance.CustomerGrid)
 		r.Get("/{id}", handlers.Instance.CustomerDetails)

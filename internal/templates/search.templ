@@ -1,0 +1,20 @@
+package templates
+
+import (
+    "github.com/fouched/go-webapp-templ/internal/models"
+)
+
+templ CustomerSearch(customers []models.Customer, pageNum string, filter string) {
+    <tbody id="searchResult">
+        for _, c := range customers {
+            @CustomerRow(c, nil)
+        }
+
+        if len(customers) >= 20 {
+            @Pagination("customer", pageNum, filter)
+        }
+    </tbody>
+    <script>
+        document.querySelector('.grid-scroll').scrollTop=0;
+    </script>
+}
