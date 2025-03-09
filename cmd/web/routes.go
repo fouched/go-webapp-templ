@@ -19,19 +19,15 @@ func routes() http.Handler {
 	//
 	r.Route("/customer", func(r chi.Router) {
 		r.Get("/", handlers.Instance.CustomerGrid)
-		//	r.Get("/{id}", handlers.Instance.CustomerDetails)
-		//	r.Get("/add", handlers.Instance.CustomerAddGet)
-		//	r.Post("/add", handlers.Instance.CustomerAddPost)
-		//	r.Post("/{id}/update", handlers.Instance.CustomerUpdate)
-		//	r.Delete("/{id}", handlers.Instance.CustomerDelete)
+		r.Get("/{id}", handlers.Instance.CustomerDetails)
+		r.Get("/add", handlers.Instance.CustomerAddGet)
+		r.Post("/add", handlers.Instance.CustomerAddPost)
+		r.Post("/{id}/update", handlers.Instance.CustomerUpdate)
+		r.Delete("/{id}", handlers.Instance.CustomerDelete)
 	})
 
-	// to externalize above rather use below, and move static files to top level directory of project
 	fileServer := http.FileServer(http.Dir("./static/"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
-
-	// to rather render embedded static resources
-	//r.Handle("/static/*", http.FileServer(http.FS(render.EmbedFS())))
 
 	return r
 }

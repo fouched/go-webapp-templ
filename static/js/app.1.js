@@ -41,6 +41,4 @@ function notify(msg, msgType) {
         timer: 3000,
         toast: true
     });
-
-    console.log("msg", msg)
 }

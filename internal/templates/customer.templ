@@ -6,7 +6,7 @@ import (
 	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
-templ CustomerGrid(customers []models.Customer, pageNum int, filter string, n *render.Notification) {
+templ CustomerGrid(customers []models.Customer, pageNum string, filter string, n *render.Notification) {
     @Layout("Customers", n) {
         <div class="container" id="customers">
             <div class="row">
@@ -28,11 +28,11 @@ templ CustomerGrid(customers []models.Customer, pageNum int, filter string, n *r
                         </thead>
                         <tbody id="searchResult">
                             for _, c := range customers {
-                                @CustomerRow(c)
+                                @CustomerRow(c, nil)
                             }
 
                             if len(customers) >= 20 {
-                                <div>There is more to load</div>
+                                @Pagination("customer", pageNum, filter)
                             }
                         </tbody>
                     </table>
@@ -47,10 +47,10 @@ templ CustomerGrid(customers []models.Customer, pageNum int, filter string, n *r
     }
 }
 
-templ CustomerRow(c models.Customer) {
+templ CustomerRow(c models.Customer, n *render.Notification) {
     <tr
             id={ "customer-" + strconv.FormatInt(c.ID, 10) }
-            class="text-nowrap {{with .Success}}table-success{{end}} {{with .Error}}table-danger{{end}}"
+            class={"text-nowrap", templ.KV("table-success", n != nil && n.Success != ""), templ.KV("table-danger", n != nil && n.Error != "")}
     >
         <td class="selectable"
             hx-get={ "/customer/" + strconv.FormatInt(c.ID, 10) }
@@ -72,14 +72,121 @@ templ CustomerRow(c models.Customer) {
                     id="customer-delete-btn"
                     class="btn btn-sm btn-outline-danger"
                     hx-delete={ "/customer/" + strconv.FormatInt(c.ID, 10) }
-                    hx-target={ "/customer/" + strconv.FormatInt(c.ID, 10) }
+                    hx-target={ "#customer-" + strconv.FormatInt(c.ID, 10) }
                     hx-swap="outerHTML"
             >Delete</button>
         </td>
     </tr>
 }
 
-templ CustomerDetails() {
+templ CustomerDetails(c models.Customer) {
+    <form
+        hx-post={ "/customer/" + strconv.FormatInt(c.ID, 10) + "/update" }
+        hx-target={ "#customer-" + strconv.FormatInt(c.ID, 10) }
+        hx-swap="outerHTML"
+        class="needs-validation"
+        novalidate>
 
+        <div id="customerDetails" class="row mt-3">
+            <div class="row">
+                <div>
+                    <h6 class="me-auto">Customer Details</h6>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <div>
+                        <label for="customerName" class="col-1 me-2"><span class="text-danger me-1">*</span>Name</label>
+                        <input type="text" class="form-control mb-2" name="customerName" id="customerName" value={c.CustomerName} autofocus required>
+                        <div class="invalid-feedback">Customer name is required</div>
+                    </div>
+                    <div>
+                        <label for="tel" class="col-1  me-2">Tel</label>
+                        <input type="text" class="form-control mb-2" name="tel" id="tel" value={c.Tel}>
+                    </div>
+                    <div>
+                        <label for="email" class="col-1 me-2"><span class="text-danger me-1">*</span>Email</label>
+                        <input type="email" class="form-control mb-2" name="email" id="email" value={c.Email} required>
+                        <div class="invalid-feedback">A valid email is required</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label for="address1">Address</label>
+                    <input type="text" class="form-control mb-1" name="address1" id="address1" value={c.Address1}>
+                    <input type="text" class="form-control mb-1" name="address2" id="address2" value={c.Address2}>
+                    <input type="text" class="form-control mb-2" name="address3" id="address3" value={c.Address3}>
+                    <label for="postCode">Postal Code</label>
+                    <input type="text" class="form-control" name="postCode" id="postCode" value={c.PostCode}>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-sm btn-success" onclick="validate()">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+templ CustomerAdd() {
+    @Layout("Customers", nil) {
+        <div class="container" id="customers">
+            <div class="row">
+                <div class="d-flex mt-3 mb-2">
+                    <h5 class="me-auto">Add Customer</h5>
+                </div>
+            </div>
+            <div class="row">
+                <form class="needs-validation"
+                        action="/customer/add"
+                        method="post"
+                      novalidate>
+                    <div id="customerDetails" class="row mt-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div>
+                                    <label for="customerName" class="col-1 me-2"><span class="text-danger me-1">*</span>Name</label>
+                                    <input type="text" class="form-control mb-2" name="customerName" id="customerName" value="" autofocus required>
+                                    <div class="invalid-feedback">Customer name is required</div>
+                                </div>
+                                <div>
+                                    <label for="tel" class="col-1 me-2">Tel</label>
+                                    <input type="text" class="form-control mb-2" name="tel" id="tel" value="">
+                                </div>
+                                <div>
+                                    <label for="email" class="col-1 me-2"><span class="text-danger me-1">*</span>Email</label>
+                                    <input type="email" class="form-control mb-2" name="email" id="email" value="" required>
+                                    <div class="invalid-feedback">A valid email is required</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="address1">Address</label>
+                                <input type="text" class="form-control mb-1" name="address1" id="address1" value="">
+                                <input type="text" class="form-control mb-1" name="address2" id="address2" value="">
+                                <input type="text" class="form-control mb-2" name="address3" id="address3" value="">
+                                <label for="postCode">Postal Code</label>
+                                <input type="text" class="form-control" name="postCode" id="postCode" value="">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 text-end">
+                                <a class="btn btn-sm btn-warning" href="#" onclick="history.back()">Cancel</a>
+                                <button type="submit" class="btn btn-sm btn-success" onclick="validate()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+templ CustomerUpdate(c models.Customer, n *render.Notification) {
+    @CustomerRow(c, n)
+    @Toast(n)
+}
+
+templ CustomerDelete(n *render.Notification) {
+	@Toast(n)
 }
 

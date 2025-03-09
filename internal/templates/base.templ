@@ -18,13 +18,13 @@ templ Layout(title string, n *render.Notification) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="/static/js/app.1.js"></script>
 
-        if n.Success != "" {
+        if n != nil && n.Success != "" {
             @templ.JSFuncCall("notify", n.Success, "success")
         }
-        if n.Warning != "" {
+        if n != nil && n.Warning != "" {
             @templ.JSFuncCall("notify", n.Warning, "warning")
         }
-        if n.Error != "" {
+        if n != nil && n.Error != "" {
             @templ.JSFuncCall("notify", n.Error, "error")
         }
 	</body>
@@ -45,4 +45,16 @@ templ Pagination(page, pageNum, filter string) {
             </span>
         </td>
     </tr>
+}
+
+templ Toast(n *render.Notification) {
+    if n != nil && n.Success != "" {
+        @templ.JSFuncCall("notify", n.Success, "success")
+    }
+    if n != nil && n.Warning != "" {
+        @templ.JSFuncCall("notify", n.Warning, "warning")
+    }
+    if n != nil && n.Error != "" {
+        @templ.JSFuncCall("notify", n.Error, "error")
+    }
 }

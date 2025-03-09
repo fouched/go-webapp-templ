@@ -23,8 +23,8 @@ func (r *testCustomerRepo) SelectCustomerGridWithFilter(page int, filter string)
 	return nil, nil
 }
 
-func (r *testCustomerRepo) SelectCustomerById(id int64) (*models.Customer, error) {
-	return nil, nil
+func (r *testCustomerRepo) SelectCustomerById(id int64) (models.Customer, error) {
+	return models.Customer{}, nil
 }
 
 func (r *testCustomerRepo) CustomerInsert(customer *models.Customer) (int64, error) {

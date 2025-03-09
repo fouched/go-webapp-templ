@@ -44,10 +44,10 @@ func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Cu
 
 }
 
-func (s *customerServicer) GetCustomerById(id int64) (*models.Customer, error) {
+func (s *customerServicer) GetCustomerById(id int64) (models.Customer, error) {
 	customer, err := s.Repo.SelectCustomerById(id)
 	if err != nil {
-		return nil, err
+		return models.Customer{}, err
 	}
 
 	return customer, nil

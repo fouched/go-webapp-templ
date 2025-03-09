@@ -79,7 +79,7 @@ func getCustomerSlice(rows *sql.Rows) ([]models.Customer, error) {
 	return customers, nil
 }
 
-func (r *postgresCustomerRepo) SelectCustomerById(id int64) (*models.Customer, error) {
+func (r *postgresCustomerRepo) SelectCustomerById(id int64) (models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -102,10 +102,10 @@ func (r *postgresCustomerRepo) SelectCustomerById(id int64) (*models.Customer, e
 		&c.PostCode,
 	)
 	if err != nil {
-		return nil, err
+		return models.Customer{}, err
 	}
 
-	return &c, nil
+	return c, nil
 }
 
 func (r *postgresCustomerRepo) CustomerInsert(customer *models.Customer) (int64, error) {

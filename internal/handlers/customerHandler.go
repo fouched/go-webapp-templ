@@ -32,7 +32,13 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t := templates.CustomerGrid(customers, p, filter, &render.Notification{})
+	// increment p for next page
+	p = p + 1
+	t := templates.CustomerGrid(customers, strconv.Itoa(p), filter, &render.Notification{
+		Success: h.App.Session.PopString(r.Context(), "success"),
+		Warning: h.App.Session.PopString(r.Context(), "warning"),
+		Error:   h.App.Session.PopString(r.Context(), "error"),
+	})
 	_ = render.Template(w, r, t)
 }
 
@@ -45,16 +51,13 @@ func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
 		h.App.Session.Put(r.Context(), "error", "Error getting customer")
 	}
 
-	data := make(map[string]interface{})
-	data["Customer"] = customer
-
-	//_ = render.Partial(w, r, "customer", "customer-details", &render.TemplateData{
-	//	Data: data,
-	//})
+	t := templates.CustomerDetails(customer)
+	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerAddGet(w http.ResponseWriter, r *http.Request) {
-	//_ = render.Template(w, r, "customer", "customer-add", &render.TemplateData{})
+	t := templates.CustomerAdd()
+	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +93,7 @@ func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
 		customer.ID = id
 	}
 
-	http.Redirect(w, r, "/customers", http.StatusSeeOther)
+	http.Redirect(w, r, "/customer", http.StatusSeeOther)
 }
 
 func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
@@ -120,19 +123,17 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 		h.App.Session.Put(r.Context(), "error", customer.Error)
 
 	}
+
 	customer.Success = "Customer updated successfully"
-	data := make(map[string]interface{})
-	data["Customer"] = customer
-
 	h.App.Session.Put(r.Context(), "success", customer.Success)
-	//_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
-	//	Data: data,
-	//}, "customer-row")
 
+	t := templates.CustomerUpdate(customer, &render.Notification{
+		Success: customer.Success,
+	})
+	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
-
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
 	err := services.CustomerService(h.App).DeleteCustomerById(id)
@@ -142,14 +143,15 @@ func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 
 		// load the customer again because we normally remove the row from the UI
 		customer, _ := services.CustomerService(h.App).GetCustomerById(id)
-		data := make(map[string]interface{})
-		data["Customer"] = customer
-		//_ = render.Partial(w, r, "customer", "customer-update", &render.TemplateData{
-		//	Data: data,
-		//}, "customer-row")
+		t := templates.CustomerUpdate(customer, &render.Notification{
+			Error: "Error deleting customer",
+		})
+		_ = render.Template(w, r, t)
 	} else {
 		h.App.Session.Put(r.Context(), "success", "Customer deleted successfully")
-		//_ = render.Partial(w, r, "customer", "customer-delete", &render.TemplateData{})
+		t := templates.CustomerDelete(&render.Notification{
+			Success: "Customer deleted successfully",
+		})
+		_ = render.Template(w, r, t)
 	}
-
 }
