@@ -20,7 +20,7 @@ func NewHandlerConfig(a *config.App) *Handlers {
 	}
 }
 
-// NewHandlers set
+// NewHandlers creates the handler instance
 func NewHandlers(h *Handlers) {
 	Instance = h
 }
