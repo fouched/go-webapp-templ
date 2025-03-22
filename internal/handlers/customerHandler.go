@@ -114,14 +114,12 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 
 	err = services.CustomerService(h.App).CustomerUpdate(&customer)
 	if err != nil {
-		customer.Error = "Error updating customer"
 		h.App.ErrorLog.Print(err)
-		h.App.Session.Put(r.Context(), "error", customer.Error)
+		h.App.Session.Put(r.Context(), "error", "Error updating customer")
 
 	}
 
-	customer.Success = "Customer updated successfully"
-	h.App.Session.Put(r.Context(), "success", customer.Success)
+	h.App.Session.Put(r.Context(), "success", "Customer updated successfully")
 
 	t := templates.CustomerUpdate(customer, getNotifications(r))
 	_ = render.Template(w, r, t)
