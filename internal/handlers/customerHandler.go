@@ -34,11 +34,7 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 
 	// increment p for next page
 	p = p + 1
-	t := templates.CustomerGrid(customers, strconv.Itoa(p), filter, &render.Notification{
-		Success: h.App.Session.PopString(r.Context(), "success"),
-		Warning: h.App.Session.PopString(r.Context(), "warning"),
-		Error:   h.App.Session.PopString(r.Context(), "error"),
-	})
+	t := templates.CustomerGrid(customers, strconv.Itoa(p), filter, getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -127,9 +123,7 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 	customer.Success = "Customer updated successfully"
 	h.App.Session.Put(r.Context(), "success", customer.Success)
 
-	t := templates.CustomerUpdate(customer, &render.Notification{
-		Success: customer.Success,
-	})
+	t := templates.CustomerUpdate(customer, getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -143,15 +137,11 @@ func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 
 		// load the customer again because we normally remove the row from the UI
 		customer, _ := services.CustomerService(h.App).GetCustomerById(id)
-		t := templates.CustomerUpdate(customer, &render.Notification{
-			Error: "Error deleting customer",
-		})
+		t := templates.CustomerUpdate(customer, getNotifications(r))
 		_ = render.Template(w, r, t)
 	} else {
 		h.App.Session.Put(r.Context(), "success", "Customer deleted successfully")
-		t := templates.CustomerDelete(&render.Notification{
-			Success: "Customer deleted successfully",
-		})
+		t := templates.CustomerDelete(getNotifications(r))
 		_ = render.Template(w, r, t)
 	}
 }
