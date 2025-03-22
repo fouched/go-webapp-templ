@@ -17,9 +17,9 @@ The included **.air.toml** file reloads changes to templ templates as well, so i
 go install github.com/a-h/templ/cmd/templ@latest
 ```
 
-### Step 2: Create Docker containers
+### Step 2: Create Docker containers (-d in background)
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 ### Step 3: Run database migrations
