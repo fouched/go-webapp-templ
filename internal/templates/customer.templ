@@ -3,6 +3,7 @@ package templates
 import (
     "strconv"
     "github.com/fouched/go-webapp-templ/internal/render"
+	"github.com/fouched/go-webapp-templ/internal/data"
 	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
@@ -185,5 +186,80 @@ templ CustomerUpdate(c models.Customer, n *render.Notification) {
 
 templ CustomerDelete(n *render.Notification) {
 	@Toast(n)
+}
+
+
+templ CustomerGridV2(customers []*data.Customer, pageNum string, filter string, n *render.Notification) {
+    @Layout("Customers", n) {
+        <div class="container" id="customers">
+            <div class="row">
+                <div class="d-flex mt-3 mb-2">
+                    <h5 class="me-auto">Manage Customers</h5>
+                    <div><a href="/customer/add" class="btn btn-sm btn-primary">New</a></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive grid-scroll">
+                    <table class="table table-sm table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-4">Name</th>
+                            <th class="col-2">Tel</th>
+                            <th class="col-5">Email</th>
+                            <th class="col-1">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="searchResult">
+                            for _, c := range customers {
+                                @CustomerRowV2(c, nil)
+                            }
+
+                            if len(customers) >= 20 {
+                                @PaginationV2("customer/v2", pageNum, filter)
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="customerDetails" class="row mt-3">
+                <div class="col-12 text-center text-success">
+                    Click on a customer to load details
+                </div>
+            </div>
+        </div>
+    }
+}
+
+templ CustomerRowV2(c *data.Customer, n *render.Notification) {
+    <tr
+            id={ "customer-" + strconv.FormatInt(c.ID, 10) }
+            class={"text-nowrap", templ.KV("table-success", n != nil && n.Success != ""), templ.KV("table-danger", n != nil && n.Error != "")}
+    >
+        <td class="selectable"
+            hx-get={ "/customer/" + strconv.FormatInt(c.ID, 10) }
+            hx-trigger="click"
+            hx-target="#customerDetails"
+            hx-swap="innerHTML">{c.CustomerName}
+        </td>
+        <td>{c.Tel}</td>
+        <td><a href={ templ.SafeURL("mailto:" + c.Email) }>{c.Email}</a></td>
+        <td class="d-flex flex-nowrap">
+            <button class="btn btn-sm btn-outline-success me-1"
+                    hx-get={ "/customer/" + strconv.FormatInt(c.ID, 10) }
+                    hx-trigger="click"
+                    hx-target="#customerDetails"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+            >Edit</button>
+            <button
+                    id="customer-delete-btn"
+                    class="btn btn-sm btn-outline-danger"
+                    hx-delete={ "/customer/" + strconv.FormatInt(c.ID, 10) }
+                    hx-target={ "#customer-" + strconv.FormatInt(c.ID, 10) }
+                    hx-swap="outerHTML"
+            >Delete</button>
+        </td>
+    </tr>
 }
 

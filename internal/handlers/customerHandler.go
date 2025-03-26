@@ -38,6 +38,31 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 	_ = render.Template(w, r, t)
 }
 
+func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
+	page := "customer"
+	h.App.Session.Put(r.Context(), "page", page)
+
+	p := 0
+	pageNum := r.URL.Query().Get("pageNum")
+	filter := r.URL.Query().Get("filter")
+
+	if pageNum != "" {
+		p, _ = strconv.Atoi(pageNum)
+	}
+
+	customers, err := services.CustomerService(h.App).GetCustomerGridV2(uint(p), filter)
+	if err != nil {
+		h.App.ErrorLog.Print(err)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// increment p for next page
+	p = p + 1
+	t := templates.CustomerGridV2(customers, strconv.Itoa(p), filter, getNotifications(r))
+	_ = render.Template(w, r, t)
+}
+
 func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 

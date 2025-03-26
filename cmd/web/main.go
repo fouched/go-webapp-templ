@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/fouched/go-webapp-templ/internal/config"
+	"github.com/fouched/go-webapp-templ/internal/data"
 	"github.com/fouched/go-webapp-templ/internal/driver"
 	"github.com/fouched/go-webapp-templ/internal/handlers"
 	"github.com/fouched/go-webapp-templ/internal/render"
@@ -66,6 +67,7 @@ func run() (*driver.DB, error) {
 	}
 	app.InfoLog.Println("Connected to DB")
 	app.DB = db
+	data.New(db.SQL)
 
 	// seed the database ?
 	//seed(db.SQL)

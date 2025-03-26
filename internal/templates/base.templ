@@ -60,3 +60,19 @@ templ Toast(n *render.Notification) {
         @templ.JSFuncCall("notify", n.Error, "error")
     }
 }
+
+templ PaginationV2(page, pageNum, filter string) {
+    <tr class="text-center">
+        <td colspan="4">
+            <span
+                    hx-target="closest tr"
+                    hx-trigger="intersect once"
+                    hx-swap="outerHTML"
+                    hx-select="tbody > tr"
+                    hx-get={"/" + page + "?pageNum=" + pageNum + "&filter=" + filter}
+            >
+            Loading More...
+            </span>
+        </td>
+    </tr>
+}

@@ -26,6 +26,10 @@ func routes() http.Handler {
 		r.Delete("/{id}", handlers.Instance.CustomerDelete)
 	})
 
+	r.Route("/customer/v2", func(r chi.Router) {
+		r.Get("/", handlers.Instance.CustomerGridV2)
+	})
+
 	fileServer := http.FileServer(http.Dir("./static/"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 

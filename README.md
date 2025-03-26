@@ -53,6 +53,7 @@ go get github.com/alexedwards/scs/v2
 go get -u github.com/go-chi/chi/v5
 go get github.com/go-chi/cors
 go get github.com/jackc/pgx/v5
+go get github.com/upper/db/v4/adapter/postgresql
 go get github.com/jaswdr/faker/v2
 ```
 

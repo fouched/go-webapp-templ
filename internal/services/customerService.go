@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/fouched/go-webapp-templ/internal/config"
+	"github.com/fouched/go-webapp-templ/internal/data"
 	"github.com/fouched/go-webapp-templ/internal/models"
 	"github.com/fouched/go-webapp-templ/internal/repo"
 )
@@ -42,6 +43,17 @@ func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Cu
 		return customers, nil
 	}
 
+}
+
+func (s *customerServicer) GetCustomerGridV2(page uint, filter string) ([]*data.Customer, error) {
+	var customers []*data.Customer
+
+	customers, err := s.App.Repo.Customers.GetCustomerGrid(page)
+	if err != nil {
+		return nil, err
+	}
+
+	return customers, nil
 }
 
 func (s *customerServicer) GetCustomerById(id int64) (models.Customer, error) {
