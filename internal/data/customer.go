@@ -19,7 +19,7 @@ func (c *Customer) Table() string {
 	return "customer"
 }
 
-// GetCustomerGrid returns all customers. TODO change to rather use pointers
+// GetCustomerGrid returns all customers
 func (c *Customer) GetCustomerGrid(pageNum uint) ([]*Customer, error) {
 	var customers []*Customer
 

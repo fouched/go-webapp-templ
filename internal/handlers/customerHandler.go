@@ -42,7 +42,7 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 	page := "customer"
 	h.App.Session.Put(r.Context(), "page", page)
 
-	p := 0
+	p := 1 // with upper page numbering starts from 1
 	pageNum := r.URL.Query().Get("pageNum")
 	filter := r.URL.Query().Get("filter")
 
