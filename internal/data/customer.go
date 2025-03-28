@@ -1,6 +1,8 @@
 package data
 
-import "time"
+import (
+	"time"
+)
 
 type Customer struct {
 	ID           int64     `db:"id,omitempty"`
@@ -19,8 +21,8 @@ func (c *Customer) Table() string {
 	return "customer"
 }
 
-// GetCustomerGrid returns all customers
-func (c *Customer) GetCustomerGrid(pageNum uint) ([]*Customer, error) {
+// GetGrid returns all customers
+func (c *Customer) GetGrid(pageNum uint) ([]*Customer, error) {
 	var customers []*Customer
 
 	collection := upper.Collection(c.Table())
@@ -33,4 +35,53 @@ func (c *Customer) GetCustomerGrid(pageNum uint) ([]*Customer, error) {
 	}
 
 	return customers, nil
+}
+
+func (c *Customer) Get(id int64) (*Customer, error) {
+	var customer Customer
+
+	collection := upper.Collection(c.Table())
+	rs := collection.Find(id) // same as Find(upperdb.Cond{"id": id})
+	err := rs.One(&customer)
+	if err != nil {
+		return &Customer{}, nil
+	}
+
+	return &customer, nil
+}
+
+func (c *Customer) Add(customer *Customer) (int64, error) {
+	collection := upper.Collection(c.Table())
+	rs, err := collection.Insert(customer)
+	if err != nil {
+		return 0, err
+	}
+
+	id := rs.ID()
+	return id.(int64), nil
+}
+
+func (c *Customer) Update(customer *Customer) error {
+	customer.UpdatedAt = time.Now()
+	collection := upper.Collection(c.Table())
+	rs := collection.Find(customer.ID)
+
+	err := rs.Update(&customer)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Customer) Delete(id int64) error {
+	collection := upper.Collection(c.Table())
+	rs := collection.Find(id)
+
+	err := rs.Delete()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

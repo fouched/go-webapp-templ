@@ -48,7 +48,7 @@ func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Cu
 func (s *customerServicer) GetCustomerGridV2(page uint, filter string) ([]*data.Customer, error) {
 	var customers []*data.Customer
 
-	customers, err := s.App.Repo.Customers.GetCustomerGrid(page)
+	customers, err := s.App.Repo.Customers.GetGrid(page)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +65,22 @@ func (s *customerServicer) GetCustomerById(id int64) (models.Customer, error) {
 	return customer, nil
 }
 
+func (s *customerServicer) GetCustomerByIdV2(id int64) (*data.Customer, error) {
+	customer, err := s.App.Repo.Customers.Get(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, nil
+}
+
 func (s *customerServicer) CustomerInsert(customer *models.Customer) (int64, error) {
 	id, err := s.Repo.CustomerInsert(customer)
+	return id, err
+}
+
+func (s *customerServicer) CustomerInsertV2(customer *data.Customer) (int64, error) {
+	id, err := s.App.Repo.Customers.Add(customer)
 	return id, err
 }
 
@@ -74,6 +88,14 @@ func (s *customerServicer) CustomerUpdate(customer *models.Customer) error {
 	return s.Repo.CustomerUpdate(customer)
 }
 
+func (s *customerServicer) CustomerUpdateV2(customer *data.Customer) error {
+	return s.App.Repo.Customers.Update(customer)
+}
+
 func (s *customerServicer) DeleteCustomerById(id int64) error {
 	return s.Repo.CustomerDelete(id)
+}
+
+func (s *customerServicer) DeleteCustomerByIdV2(id int64) error {
+	return s.App.Repo.Customers.Delete(id)
 }

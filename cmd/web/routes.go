@@ -28,6 +28,11 @@ func routes() http.Handler {
 
 	r.Route("/customer/v2", func(r chi.Router) {
 		r.Get("/", handlers.Instance.CustomerGridV2)
+		r.Get("/{id}", handlers.Instance.CustomerDetailsV2)
+		r.Get("/add", handlers.Instance.CustomerAddGetV2)
+		r.Post("/add", handlers.Instance.CustomerAddPostV2)
+		r.Post("/{id}/update", handlers.Instance.CustomerUpdateV2)
+		r.Delete("/{id}", handlers.Instance.CustomerDeleteV2)
 	})
 
 	fileServer := http.FileServer(http.Dir("./static/"))
