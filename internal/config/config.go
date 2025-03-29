@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/alexedwards/scs/v2"
-	"github.com/fouched/go-webapp-templ/internal/data"
 	"github.com/fouched/go-webapp-templ/internal/driver"
 	"html/template"
 	"log"
@@ -16,5 +15,4 @@ type App struct {
 	ErrorLog      *log.Logger
 	Session       *scs.SessionManager
 	TemplateCache map[string]*template.Template
-	Repo          data.Models
 }
