@@ -39,6 +39,24 @@ func (c *Customer) GetGrid(pageNum uint) ([]*Customer, error) {
 	return customers, nil
 }
 
+// GetGridFiltered returns a filtered slice of customers based on criteria
+func (c *Customer) GetGridFiltered(pageNum uint, filter string) ([]*Customer, error) {
+
+	var customers []*Customer
+
+	rs := upper.SQL().SelectFrom(c.Table()).
+		Where("customer_name ILIKE ?", "%"+filter+"%").
+		OrderBy("customer_name")
+
+	p := rs.Paginate(PageSize)
+	err := p.Page(pageNum).All(&customers)
+	if err != nil {
+		return nil, err
+	}
+
+	return customers, nil
+}
+
 func (c *Customer) Get(id int64) (*Customer, error) {
 
 	var customer Customer

@@ -215,7 +215,7 @@ templ CustomerGridV2(customers []*data.Customer, pageNum string, filter string, 
                             }
 
                             if len(customers) >= 20 {
-                                @PaginationV2("customer/v2", pageNum, filter)
+                                @Pagination("customer/v2", pageNum, filter)
                             }
 
                         </tbody>
@@ -265,7 +265,7 @@ templ CustomerRowV2(c *data.Customer, n *render.Notification) {
 
 templ CustomerDetailsV2(c *data.Customer) {
     <form
-        hx-post={ "/customer/" + strconv.FormatInt(c.ID, 10) + "/update" }
+        hx-post={ "/customer/v2" + strconv.FormatInt(c.ID, 10) + "/update" }
         hx-target={ "#customer-" + strconv.FormatInt(c.ID, 10) }
         hx-swap="outerHTML"
         class="needs-validation"

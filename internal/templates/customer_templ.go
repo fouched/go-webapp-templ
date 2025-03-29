@@ -537,7 +537,7 @@ func CustomerGridV2(customers []*data.Customer, pageNum string, filter string, n
 				}
 			}
 			if len(customers) >= 20 {
-				templ_7745c5c3_Err = PaginationV2("customer/v2", pageNum, filter).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = Pagination("customer/v2", pageNum, filter).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -742,9 +742,9 @@ func CustomerDetailsV2(c *data.Customer) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var44 string
-		templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs("/customer/" + strconv.FormatInt(c.ID, 10) + "/update")
+		templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs("/customer/v2" + strconv.FormatInt(c.ID, 10) + "/update")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/customer.templ`, Line: 268, Col: 72}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/customer.templ`, Line: 268, Col: 74}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 		if templ_7745c5c3_Err != nil {

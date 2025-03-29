@@ -2,6 +2,7 @@ package templates
 
 import (
     "github.com/fouched/go-webapp-templ/internal/models"
+    "github.com/fouched/go-webapp-templ/internal/data"
 )
 
 templ CustomerSearch(customers []models.Customer, pageNum string, filter string) {
@@ -13,8 +14,26 @@ templ CustomerSearch(customers []models.Customer, pageNum string, filter string)
         if len(customers) >= 20 {
             @Pagination("customer", pageNum, filter)
         }
+        
+        <script>
+            document.querySelector('.grid-scroll').scrollTop=0;
+        </script>
     </tbody>
-    <script>
-        document.querySelector('.grid-scroll').scrollTop=0;
-    </script>
+}
+
+templ CustomerSearchV2(customers []*data.Customer, pageNum string, filter string) {
+    <tbody id="searchResult">
+        for _, c := range customers {
+            @CustomerRowV2(c, nil)
+        }
+
+        if len(customers) >= 20 {
+            @Pagination("customer/v2", pageNum, filter)
+        }
+
+        <script>
+            document.querySelector('.grid-scroll').scrollTop=0;
+        </script>
+    </tbody>
+
 }

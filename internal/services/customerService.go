@@ -30,6 +30,7 @@ func CustomerService(a *config.App) CustomerServicer {
 func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Customer, error) {
 
 	if filter == "" {
+		s.App.InfoLog.Printf("Service Page: %d\n", page)
 		customers, err := s.Repo.SelectCustomerGrid(page)
 		if err != nil {
 			return nil, err
@@ -37,6 +38,7 @@ func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Cu
 
 		return customers, nil
 	} else {
+		s.App.InfoLog.Printf("Service Filtered Page: %d\n", page)
 		customers, err := s.Repo.SelectCustomerGridWithFilter(page, filter)
 		if err != nil {
 			return nil, err
@@ -50,6 +52,7 @@ func (s *customerServicer) GetCustomerGrid(page int, filter string) ([]models.Cu
 func (s *customerServicer) GetCustomerGridV2(page uint, filter string) ([]*data.Customer, error) {
 
 	if filter == "" {
+		s.App.InfoLog.Printf("V2 Service Page: %d\n", page)
 		customers, err := s.Data.Customers.GetGrid(page)
 		if err != nil {
 			return nil, err
@@ -57,7 +60,8 @@ func (s *customerServicer) GetCustomerGridV2(page uint, filter string) ([]*data.
 
 		return customers, nil
 	} else {
-		customers, err := s.Data.Customers.GetGrid(page)
+		s.App.InfoLog.Printf("V2 Service Filtered Page: %d\n", page)
+		customers, err := s.Data.Customers.GetGridFiltered(page, filter)
 		if err != nil {
 			return nil, err
 		}

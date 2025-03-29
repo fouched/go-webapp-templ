@@ -45,7 +45,7 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 	page := "customer"
 	h.App.Session.Put(r.Context(), "page", page)
 
-	p := 1 // with upper page numbering starts from 1
+	p := 1
 	pageNum := r.URL.Query().Get("pageNum")
 	filter := r.URL.Query().Get("filter")
 
@@ -62,6 +62,7 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 
 	// increment p for next page
 	p = p + 1
+	h.App.InfoLog.Printf("V2 Handler next page: %d", p)
 	t := templates.CustomerGridV2(customers, strconv.Itoa(p), filter, getNotifications(r))
 	_ = render.Template(w, r, t)
 }

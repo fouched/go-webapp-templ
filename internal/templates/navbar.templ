@@ -28,7 +28,7 @@ templ NavBar() {
                 <div style="width: 50px"></div>
                 <div class="d-flex flex-nowrap">
 
-                    <form action="/search" method="get" class="form-inline" hx-push-url="true">
+                    <form action="/search/v2" method="get" class="form-inline" hx-push-url="true">
                         <div class="d-flex">
                             <input
                                     id="filter"
@@ -37,7 +37,7 @@ templ NavBar() {
                                     type="search"
                                     placeholder="Search"
                                     aria-label="Search"
-                                    hx-get="/search"
+                                    hx-get="/search/v2"
                                     hx-target="#searchResult"
                                     hx-swap="outerHTML"
                                     hx-trigger="search, keyup delay:200ms changed"
@@ -48,7 +48,7 @@ templ NavBar() {
                     &nbsp;
                     <button
                             class="btn btn-sm btn-success"
-                            hx-get="/search"
+                            hx-get="/search/v2"
                             hx-target="#searchResult"
                             hx-swap="outerHTML"
                             onclick="resetSearch()"
