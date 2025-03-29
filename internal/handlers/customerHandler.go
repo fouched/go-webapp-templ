@@ -62,7 +62,6 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 
 	// increment p for next page
 	p = p + 1
-	h.App.InfoLog.Printf("V2 Handler next page: %d", p)
 	t := templates.CustomerGridV2(customers, strconv.Itoa(p), filter, getNotifications(r))
 	_ = render.Template(w, r, t)
 }
