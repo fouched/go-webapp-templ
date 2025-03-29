@@ -10,6 +10,7 @@ import (
 )
 
 func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
+
 	page, ok := h.App.Session.Get(r.Context(), "page").(string)
 	// this should never happen...
 	if !ok {

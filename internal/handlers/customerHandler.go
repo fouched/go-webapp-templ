@@ -15,6 +15,7 @@ import (
 )
 
 func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
+
 	page := "customer"
 	h.App.Session.Put(r.Context(), "page", page)
 
@@ -40,6 +41,7 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
+
 	page := "customer"
 	h.App.Session.Put(r.Context(), "page", page)
 
@@ -65,6 +67,7 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
+
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
 	customer, err := services.CustomerService(h.App).GetCustomerById(id)
@@ -78,6 +81,7 @@ func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerDetailsV2(w http.ResponseWriter, r *http.Request) {
+
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
 	customer, err := services.CustomerService(h.App).GetCustomerByIdV2(id)
@@ -91,16 +95,19 @@ func (h *Handlers) CustomerDetailsV2(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerAddGet(w http.ResponseWriter, r *http.Request) {
+
 	t := templates.CustomerAdd()
 	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerAddGetV2(w http.ResponseWriter, r *http.Request) {
+
 	t := templates.CustomerAddV2()
 	_ = render.Template(w, r, t)
 }
 
 func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -137,6 +144,7 @@ func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerAddPostV2(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -173,6 +181,7 @@ func (h *Handlers) CustomerAddPostV2(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -206,6 +215,7 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerUpdateV2(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -258,6 +268,7 @@ func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) CustomerDeleteV2(w http.ResponseWriter, r *http.Request) {
+
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
 	err := services.CustomerService(h.App).DeleteCustomerByIdV2(id)

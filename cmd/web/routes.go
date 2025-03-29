@@ -10,6 +10,7 @@ import (
 )
 
 func routes() http.Handler {
+
 	r := chi.NewRouter()
 	addMiddleware(r)
 
@@ -42,6 +43,7 @@ func routes() http.Handler {
 }
 
 func addMiddleware(r *chi.Mux) {
+
 	// sessions
 	r.Use(SessionLoad)
 

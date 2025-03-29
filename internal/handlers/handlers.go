@@ -15,6 +15,7 @@ type Handlers struct {
 
 // NewHandlerConfig set the handler config and services
 func NewHandlerConfig(a *config.App) *Handlers {
+
 	return &Handlers{
 		App: a,
 	}
@@ -22,10 +23,12 @@ func NewHandlerConfig(a *config.App) *Handlers {
 
 // NewHandlers creates the handler instance
 func NewHandlers(h *Handlers) {
+
 	Instance = h
 }
 
 func getNotifications(r *http.Request) *render.Notification {
+
 	return &render.Notification{
 		Success: Instance.App.Session.PopString(r.Context(), "success"),
 		Warning: Instance.App.Session.PopString(r.Context(), "warning"),

@@ -13,6 +13,7 @@ type postgresCustomerRepo struct {
 }
 
 func NewCustomerRepo(a *config.App) CustomerRepo {
+
 	return &postgresCustomerRepo{
 		App: a,
 		DB:  a.DB.SQL,
@@ -20,6 +21,7 @@ func NewCustomerRepo(a *config.App) CustomerRepo {
 }
 
 func (r *postgresCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -40,6 +42,7 @@ func (r *postgresCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, 
 }
 
 func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error) {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -61,6 +64,7 @@ func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter str
 }
 
 func getCustomerSlice(rows *sql.Rows) ([]models.Customer, error) {
+
 	var customers []models.Customer
 	for rows.Next() {
 		var c models.Customer
@@ -80,6 +84,7 @@ func getCustomerSlice(rows *sql.Rows) ([]models.Customer, error) {
 }
 
 func (r *postgresCustomerRepo) SelectCustomerById(id int64) (models.Customer, error) {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -109,6 +114,7 @@ func (r *postgresCustomerRepo) SelectCustomerById(id int64) (models.Customer, er
 }
 
 func (r *postgresCustomerRepo) CustomerInsert(customer *models.Customer) (int64, error) {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -133,6 +139,7 @@ func (r *postgresCustomerRepo) CustomerInsert(customer *models.Customer) (int64,
 }
 
 func (r *postgresCustomerRepo) CustomerUpdate(customer *models.Customer) error {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -167,6 +174,7 @@ func (r *postgresCustomerRepo) CustomerUpdate(customer *models.Customer) error {
 }
 
 func (r *postgresCustomerRepo) CustomerDelete(id int64) error {
+
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
