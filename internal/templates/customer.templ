@@ -67,7 +67,6 @@ templ CustomerRow(c models.Customer, n *render.Notification) {
                     hx-trigger="click"
                     hx-target="#customerDetails"
                     hx-swap="innerHTML"
-                    hx-push-url="true"
             >Edit</button>
             <button
                     id="customer-delete-btn"
@@ -250,7 +249,6 @@ templ CustomerRowV2(c *data.Customer, n *render.Notification) {
                     hx-trigger="click"
                     hx-target="#customerDetails"
                     hx-swap="innerHTML"
-                    hx-push-url="true"
             >Edit</button>
             <button
                     id="customer-delete-btn"

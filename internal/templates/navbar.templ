@@ -28,7 +28,7 @@ templ NavBar() {
                 <div style="width: 50px"></div>
                 <div class="d-flex flex-nowrap">
 
-                    <form action="/search/v2" method="get" class="form-inline" hx-push-url="true">
+                    <form action="/search/v2" method="get" class="form-inline">
                         <div class="d-flex">
                             <input
                                     id="filter"
@@ -41,7 +41,7 @@ templ NavBar() {
                                     hx-target="#searchResult"
                                     hx-swap="outerHTML"
                                     hx-trigger="search, keyup delay:200ms changed"
-                                    hx-push-url="true"
+                                    onkeydown="return event.keyCode !== 13"
                             >
                         </div>
                     </form>
