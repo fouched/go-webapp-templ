@@ -18,13 +18,11 @@ type Customer struct {
 }
 
 func (c *Customer) Table() string {
-
 	return "customer"
 }
 
 // GetGrid returns all customers
 func (c *Customer) GetGrid(pageNum uint) ([]*Customer, error) {
-
 	var customers []*Customer
 
 	collection := upper.Collection(c.Table())
@@ -41,7 +39,6 @@ func (c *Customer) GetGrid(pageNum uint) ([]*Customer, error) {
 
 // GetGridFiltered returns a filtered slice of customers based on criteria
 func (c *Customer) GetGridFiltered(pageNum uint, filter string) ([]*Customer, error) {
-
 	var customers []*Customer
 
 	rs := upper.SQL().SelectFrom(c.Table()).
@@ -58,7 +55,6 @@ func (c *Customer) GetGridFiltered(pageNum uint, filter string) ([]*Customer, er
 }
 
 func (c *Customer) Get(id int64) (*Customer, error) {
-
 	var customer Customer
 
 	collection := upper.Collection(c.Table())
@@ -72,7 +68,6 @@ func (c *Customer) Get(id int64) (*Customer, error) {
 }
 
 func (c *Customer) Add(customer *Customer) (int64, error) {
-
 	collection := upper.Collection(c.Table())
 	rs, err := collection.Insert(customer)
 	if err != nil {
@@ -84,7 +79,6 @@ func (c *Customer) Add(customer *Customer) (int64, error) {
 }
 
 func (c *Customer) Update(customer *Customer) error {
-
 	customer.UpdatedAt = time.Now()
 	collection := upper.Collection(c.Table())
 	rs := collection.Find(customer.ID)
@@ -98,7 +92,6 @@ func (c *Customer) Update(customer *Customer) error {
 }
 
 func (c *Customer) Delete(id int64) error {
-
 	collection := upper.Collection(c.Table())
 	rs := collection.Find(id)
 
