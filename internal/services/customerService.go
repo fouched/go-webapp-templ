@@ -7,30 +7,28 @@ import (
 )
 
 type CustomerService struct {
-	Repo repo.CustomerRepoInterface
-	App  *config.App
+	App          *config.App
+	CustomerRepo repo.CustomerRepoInterface
 }
 
-func NewCustomerService(app *config.App, repo repo.CustomerRepoInterface) CustomerServiceInterface {
+func NewCustomerService(app *config.App) CustomerServiceInterface {
 	return &CustomerService{
-		Repo: repo,
-		App:  app,
+		App:          app,
+		CustomerRepo: app.Repo.CustomerRepo,
 	}
 }
 
 func (s *CustomerService) GetCustomerGrid(page int, filter string) ([]models.Customer, error) {
-	// overwrite the default repo to use the upper/db one
-	s.Repo = repo.NewCustomerRepoUpperDB(s.App.DB)
 
 	if filter == "" {
-		customers, err := s.Repo.SelectCustomerGrid(page)
+		customers, err := s.CustomerRepo.SelectCustomerGrid(page)
 		if err != nil {
 			return nil, err
 		}
 
 		return customers, nil
 	} else {
-		customers, err := s.Repo.SelectCustomerGridWithFilter(page, filter)
+		customers, err := s.CustomerRepo.SelectCustomerGridWithFilter(page, filter)
 		if err != nil {
 			return nil, err
 		}
@@ -40,7 +38,7 @@ func (s *CustomerService) GetCustomerGrid(page int, filter string) ([]models.Cus
 }
 
 func (s *CustomerService) GetCustomerById(id int64) (models.Customer, error) {
-	customer, err := s.Repo.SelectCustomerById(id)
+	customer, err := s.CustomerRepo.SelectCustomerById(id)
 	if err != nil {
 		return models.Customer{}, err
 	}
@@ -49,14 +47,14 @@ func (s *CustomerService) GetCustomerById(id int64) (models.Customer, error) {
 }
 
 func (s *CustomerService) CustomerInsert(customer *models.Customer) (int64, error) {
-	id, err := s.Repo.CustomerInsert(customer)
+	id, err := s.CustomerRepo.CustomerInsert(customer)
 	return id, err
 }
 
 func (s *CustomerService) CustomerUpdate(customer *models.Customer) error {
-	return s.Repo.CustomerUpdate(customer)
+	return s.CustomerRepo.CustomerUpdate(customer)
 }
 
 func (s *CustomerService) DeleteCustomerById(id int64) error {
-	return s.Repo.CustomerDelete(id)
+	return s.CustomerRepo.CustomerDelete(id)
 }

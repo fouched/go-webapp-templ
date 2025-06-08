@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/fouched/go-webapp-templ/internal/render"
-	"github.com/fouched/go-webapp-templ/internal/repo"
 	"github.com/fouched/go-webapp-templ/internal/services"
 	"github.com/fouched/go-webapp-templ/internal/templates"
 	"net/http"
@@ -22,8 +21,7 @@ func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
 	filter := strings.TrimLeft(r.URL.Query().Get("filter"), " ")
 
 	if page == "customer" {
-		customerRepo := repo.NewCustomerRepo(h.App.DB)
-		customerService := services.NewCustomerService(h.App, customerRepo)
+		customerService := services.NewCustomerService(h.App)
 		customers, err := customerService.GetCustomerGrid(pageNum, filter)
 		if err != nil {
 			h.App.ErrorLog.Print(err)

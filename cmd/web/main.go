@@ -9,6 +9,7 @@ import (
 	"github.com/fouched/go-webapp-templ/internal/driver"
 	"github.com/fouched/go-webapp-templ/internal/handlers"
 	"github.com/fouched/go-webapp-templ/internal/render"
+	"github.com/fouched/go-webapp-templ/internal/repo"
 	"github.com/jaswdr/faker/v2"
 	"html/template"
 	"log"
@@ -27,7 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// close database connection pool after application has stopped
-	defer db.SQL.Close()
+	defer db.Close()
 
 	// Create handlers instance with dependency
 	h := handlers.NewHandlers(&app)
@@ -44,7 +45,7 @@ func main() {
 
 }
 
-func run() (*driver.DB, error) {
+func run() (*sql.DB, error) {
 	// define complex types that will be stored in the session
 	//gob.Register(models.FooBar{})
 	//gob.Register(map[string]int{})
@@ -66,7 +67,11 @@ func run() (*driver.DB, error) {
 		return nil, err
 	}
 	app.InfoLog.Println("Connected to DB")
-	app.DB = db.SQL
+
+	app.Repo = config.Repo{
+		CustomerRepo: repo.NewCustomerRepo(db.SQL),
+	}
+	app.InfoLog.Println("Repositories configured")
 
 	// seed the database ?
 	//seed(db.SQL)
@@ -85,7 +90,7 @@ func run() (*driver.DB, error) {
 	// set up template rendering
 	render.NewRenderer(&app)
 
-	return db, nil
+	return db.SQL, nil
 }
 
 func seed(db *sql.DB) {

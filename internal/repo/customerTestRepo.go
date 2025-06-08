@@ -1,12 +1,10 @@
 package repo
 
 import (
-	"github.com/fouched/go-webapp-templ/internal/config"
 	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
 type testCustomerRepo struct {
-	App *config.App
 }
 
 func (r *testCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {

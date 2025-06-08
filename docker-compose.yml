@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: webapp-templ
     volumes:
-      - ./db-data:/var/lib/postgresql/data/
+      - F:/DockerData/go-webapp-templ/postgres/:/var/lib/postgresql/data/
   redis:
     image: 'redis:7.2-alpine'
     container_name: redis-webapp-templ

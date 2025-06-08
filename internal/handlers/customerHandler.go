@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/fouched/go-webapp-templ/internal/models"
 	"github.com/fouched/go-webapp-templ/internal/render"
-	"github.com/fouched/go-webapp-templ/internal/repo"
 	"github.com/fouched/go-webapp-templ/internal/services"
 	"github.com/fouched/go-webapp-templ/internal/templates"
 	"github.com/go-chi/chi/v5"
@@ -26,8 +25,7 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 		p, _ = strconv.Atoi(pageNum)
 	}
 
-	customerRepo := repo.NewCustomerRepo(h.App.DB)
-	customerService := services.NewCustomerService(h.App, customerRepo)
+	customerService := services.NewCustomerService(h.App)
 	customers, err := customerService.GetCustomerGrid(p, filter)
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -44,8 +42,7 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) CustomerDetails(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
-	customerRepo := repo.NewCustomerRepo(h.App.DB)
-	customerService := services.NewCustomerService(h.App, customerRepo)
+	customerService := services.NewCustomerService(h.App)
 	customer, err := customerService.GetCustomerById(id)
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -79,8 +76,7 @@ func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:    time.Now(),
 	}
 
-	customerRepo := repo.NewCustomerRepo(h.App.DB)
-	customerService := services.NewCustomerService(h.App, customerRepo)
+	customerService := services.NewCustomerService(h.App)
 	id, err := customerService.CustomerInsert(&customer)
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -119,8 +115,7 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:    time.Now(),
 	}
 
-	customerRepo := repo.NewCustomerRepo(h.App.DB)
-	customerService := services.NewCustomerService(h.App, customerRepo)
+	customerService := services.NewCustomerService(h.App)
 	err = customerService.CustomerUpdate(&customer)
 	if err != nil {
 		h.App.ErrorLog.Print(err)
@@ -137,8 +132,7 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 
-	customerRepo := repo.NewCustomerRepo(h.App.DB)
-	customerService := services.NewCustomerService(h.App, customerRepo)
+	customerService := services.NewCustomerService(h.App)
 	err := customerService.DeleteCustomerById(id)
 	if err != nil {
 		h.App.ErrorLog.Print(err)
