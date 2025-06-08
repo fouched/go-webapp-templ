@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/fouched/go-webapp-templ/internal/config"
-	"github.com/fouched/go-webapp-templ/internal/data"
 	"github.com/fouched/go-webapp-templ/internal/driver"
 	"github.com/fouched/go-webapp-templ/internal/handlers"
 	"github.com/fouched/go-webapp-templ/internal/render"
@@ -23,7 +22,6 @@ var app config.App
 var session *scs.SessionManager
 
 func main() {
-
 	db, err := run()
 	if err != nil {
 		log.Fatal(err)
@@ -47,7 +45,6 @@ func main() {
 }
 
 func run() (*driver.DB, error) {
-
 	// define complex types that will be stored in the session
 	//gob.Register(models.FooBar{})
 	//gob.Register(map[string]int{})
@@ -69,8 +66,7 @@ func run() (*driver.DB, error) {
 		return nil, err
 	}
 	app.InfoLog.Println("Connected to DB")
-	app.DB = db
-	data.New(db.SQL)
+	app.DB = db.SQL
 
 	// seed the database ?
 	//seed(db.SQL)

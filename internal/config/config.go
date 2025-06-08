@@ -1,8 +1,8 @@
 package config
 
 import (
+	"database/sql"
 	"github.com/alexedwards/scs/v2"
-	"github.com/fouched/go-webapp-templ/internal/driver"
 	"html/template"
 	"log"
 )
@@ -10,7 +10,7 @@ import (
 type App struct {
 	DSN           string
 	Addr          string
-	DB            *driver.DB
+	DB            *sql.DB
 	InfoLog       *log.Logger
 	ErrorLog      *log.Logger
 	Session       *scs.SessionManager

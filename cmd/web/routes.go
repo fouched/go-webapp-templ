@@ -10,14 +10,12 @@ import (
 )
 
 func routes(h *handlers.Handlers) http.Handler {
-
 	r := chi.NewRouter()
 	addMiddleware(r)
 
 	// routes
 	r.Get("/", h.Home)
 	r.Get("/search", h.Search)
-	r.Get("/search/v2", h.SearchV2)
 
 	r.Route("/customer", func(r chi.Router) {
 		r.Get("/", h.CustomerGrid)
@@ -28,15 +26,6 @@ func routes(h *handlers.Handlers) http.Handler {
 		r.Delete("/{id}", h.CustomerDelete)
 	})
 
-	r.Route("/customer/v2", func(r chi.Router) {
-		r.Get("/", h.CustomerGridV2)
-		r.Get("/{id}", h.CustomerDetailsV2)
-		r.Get("/add", h.CustomerAddGetV2)
-		r.Post("/add", h.CustomerAddPostV2)
-		r.Post("/{id}/update", h.CustomerUpdateV2)
-		r.Delete("/{id}", h.CustomerDeleteV2)
-	})
-
 	fileServer := http.FileServer(http.Dir("./static/"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
@@ -44,7 +33,6 @@ func routes(h *handlers.Handlers) http.Handler {
 }
 
 func addMiddleware(r *chi.Mux) {
-
 	// sessions
 	r.Use(SessionLoad)
 

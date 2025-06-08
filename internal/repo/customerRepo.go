@@ -3,23 +3,21 @@ package repo
 import (
 	"context"
 	"database/sql"
-	"github.com/fouched/go-webapp-templ/internal/config"
 	"github.com/fouched/go-webapp-templ/internal/models"
 )
 
-type postgresCustomerRepo struct {
-	App *config.App
-	DB  *sql.DB
+type CustomerRepo struct {
+	DB *sql.DB
 }
 
-func NewCustomerRepo(a *config.App) CustomerRepo {
-	return &postgresCustomerRepo{
-		App: a,
-		DB:  a.DB.SQL,
+// NewCustomerRepo initializes and returns a repository instance
+func NewCustomerRepo(db *sql.DB) CustomerRepoInterface {
+	return &CustomerRepo{
+		DB: db,
 	}
 }
 
-func (r *postgresCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
+func (r *CustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -39,7 +37,7 @@ func (r *postgresCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, 
 	return getCustomerSlice(rows)
 }
 
-func (r *postgresCustomerRepo) SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error) {
+func (r *CustomerRepo) SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -79,7 +77,7 @@ func getCustomerSlice(rows *sql.Rows) ([]models.Customer, error) {
 	return customers, nil
 }
 
-func (r *postgresCustomerRepo) SelectCustomerById(id int64) (models.Customer, error) {
+func (r *CustomerRepo) SelectCustomerById(id int64) (models.Customer, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -108,7 +106,7 @@ func (r *postgresCustomerRepo) SelectCustomerById(id int64) (models.Customer, er
 	return c, nil
 }
 
-func (r *postgresCustomerRepo) CustomerInsert(customer *models.Customer) (int64, error) {
+func (r *CustomerRepo) CustomerInsert(customer *models.Customer) (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -132,7 +130,7 @@ func (r *postgresCustomerRepo) CustomerInsert(customer *models.Customer) (int64,
 	return id, err
 }
 
-func (r *postgresCustomerRepo) CustomerUpdate(customer *models.Customer) error {
+func (r *CustomerRepo) CustomerUpdate(customer *models.Customer) error {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 
@@ -166,7 +164,7 @@ func (r *postgresCustomerRepo) CustomerUpdate(customer *models.Customer) error {
 	return err
 }
 
-func (r *postgresCustomerRepo) CustomerDelete(id int64) error {
+func (r *CustomerRepo) CustomerDelete(id int64) error {
 	ctx, cancel := context.WithTimeout(context.Background(), DbTimeout)
 	defer cancel()
 

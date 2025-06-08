@@ -9,7 +9,8 @@ import (
 const DbTimeout = time.Minute * 2
 const PageSize = 20
 
-type CustomerRepo interface {
+// CustomerRepoInterface defines repository methods
+type CustomerRepoInterface interface {
 	SelectCustomerGrid(page int) ([]models.Customer, error)
 	SelectCustomerGridWithFilter(page int, filter string) ([]models.Customer, error)
 	SelectCustomerById(int int64) (models.Customer, error)

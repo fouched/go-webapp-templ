@@ -7,7 +7,6 @@ import (
 )
 
 func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
-
 	h.App.Session.Put(r.Context(), "searchTarget", "home")
 
 	t := templates.Home()

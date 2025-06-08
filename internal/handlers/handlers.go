@@ -15,7 +15,6 @@ func NewHandlers(app *config.App) *Handlers {
 }
 
 func (h *Handlers) getNotifications(r *http.Request) *render.Notification {
-
 	return &render.Notification{
 		Success: h.App.Session.PopString(r.Context(), "success"),
 		Warning: h.App.Session.PopString(r.Context(), "warning"),

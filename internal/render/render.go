@@ -20,7 +20,6 @@ type Notification struct {
 }
 
 func Template(w http.ResponseWriter, r *http.Request, template templ.Component) error {
-
 	// clear notification session data
 	_ = app.Session.PopString(r.Context(), "success")
 	_ = app.Session.PopString(r.Context(), "warning")

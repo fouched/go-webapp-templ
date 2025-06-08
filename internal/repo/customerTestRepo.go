@@ -9,12 +9,6 @@ type testCustomerRepo struct {
 	App *config.App
 }
 
-func NewTestCustomerRepo(a *config.App) CustomerRepo {
-	return &testCustomerRepo{
-		App: a,
-	}
-}
-
 func (r *testCustomerRepo) SelectCustomerGrid(page int) ([]models.Customer, error) {
 	return nil, nil
 }
