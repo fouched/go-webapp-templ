@@ -18,6 +18,7 @@ go install github.com/a-h/templ/cmd/templ@latest
 ```
 
 ### Step 2: Create Docker containers (-d in background)
+<b>Note:</b> The docker compose is configured to persist volumes to a local drive. Update the <i>docker-compose.yml</i> to a location of your choice.
 ```
 docker-compose up -d
 ```
