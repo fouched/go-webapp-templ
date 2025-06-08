@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-// func routes() http.Handler {
 func routes(h *handlers.Handlers) http.Handler {
 
 	r := chi.NewRouter()
