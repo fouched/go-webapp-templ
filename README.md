@@ -46,7 +46,7 @@ To create some data uncomment the line in main.go and run the project once.
 
 ### Step 6 : Change repository implementations
 Repositories are injected via config.App which is configured when the application initializes.
-The application come with a native SQL implementation, and an upper/db one. 
+The application comes with a native SQL implementation, and an upper/db one. 
 Update main.go to switch implementations - this can logically also done via environment based configuration if need be.  
 
 ## Dependencies
