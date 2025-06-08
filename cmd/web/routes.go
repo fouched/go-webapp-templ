@@ -9,32 +9,33 @@ import (
 	"time"
 )
 
-func routes() http.Handler {
+// func routes() http.Handler {
+func routes(h *handlers.Handlers) http.Handler {
 
 	r := chi.NewRouter()
 	addMiddleware(r)
 
 	// routes
-	r.Get("/", handlers.Instance.Home)
-	r.Get("/search", handlers.Instance.Search)
-	r.Get("/search/v2", handlers.Instance.SearchV2)
+	r.Get("/", h.Home)
+	r.Get("/search", h.Search)
+	r.Get("/search/v2", h.SearchV2)
 
 	r.Route("/customer", func(r chi.Router) {
-		r.Get("/", handlers.Instance.CustomerGrid)
-		r.Get("/{id}", handlers.Instance.CustomerDetails)
-		r.Get("/add", handlers.Instance.CustomerAddGet)
-		r.Post("/add", handlers.Instance.CustomerAddPost)
-		r.Post("/{id}/update", handlers.Instance.CustomerUpdate)
-		r.Delete("/{id}", handlers.Instance.CustomerDelete)
+		r.Get("/", h.CustomerGrid)
+		r.Get("/{id}", h.CustomerDetails)
+		r.Get("/add", h.CustomerAddGet)
+		r.Post("/add", h.CustomerAddPost)
+		r.Post("/{id}/update", h.CustomerUpdate)
+		r.Delete("/{id}", h.CustomerDelete)
 	})
 
 	r.Route("/customer/v2", func(r chi.Router) {
-		r.Get("/", handlers.Instance.CustomerGridV2)
-		r.Get("/{id}", handlers.Instance.CustomerDetailsV2)
-		r.Get("/add", handlers.Instance.CustomerAddGetV2)
-		r.Post("/add", handlers.Instance.CustomerAddPostV2)
-		r.Post("/{id}/update", handlers.Instance.CustomerUpdateV2)
-		r.Delete("/{id}", handlers.Instance.CustomerDeleteV2)
+		r.Get("/", h.CustomerGridV2)
+		r.Get("/{id}", h.CustomerDetailsV2)
+		r.Get("/add", h.CustomerAddGetV2)
+		r.Post("/add", h.CustomerAddPostV2)
+		r.Post("/{id}/update", h.CustomerUpdateV2)
+		r.Delete("/{id}", h.CustomerDeleteV2)
 	})
 
 	fileServer := http.FileServer(http.Dir("./static/"))

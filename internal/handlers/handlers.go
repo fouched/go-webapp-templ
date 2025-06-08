@@ -6,32 +6,19 @@ import (
 	"net/http"
 )
 
-// Instance the setup for all handlers
-var Instance *Handlers
-
 type Handlers struct {
 	App *config.App
 }
 
-// NewHandlerConfig set the handler config and services
-func NewHandlerConfig(a *config.App) *Handlers {
-
-	return &Handlers{
-		App: a,
-	}
+func NewHandlers(app *config.App) *Handlers {
+	return &Handlers{App: app}
 }
 
-// NewHandlers creates the handler instance
-func NewHandlers(h *Handlers) {
-
-	Instance = h
-}
-
-func getNotifications(r *http.Request) *render.Notification {
+func (h *Handlers) getNotifications(r *http.Request) *render.Notification {
 
 	return &render.Notification{
-		Success: Instance.App.Session.PopString(r.Context(), "success"),
-		Warning: Instance.App.Session.PopString(r.Context(), "warning"),
-		Error:   Instance.App.Session.PopString(r.Context(), "error"),
+		Success: h.App.Session.PopString(r.Context(), "success"),
+		Warning: h.App.Session.PopString(r.Context(), "warning"),
+		Error:   h.App.Session.PopString(r.Context(), "error"),
 	}
 }

@@ -36,7 +36,7 @@ func (h *Handlers) CustomerGrid(w http.ResponseWriter, r *http.Request) {
 
 	// increment p for next page
 	p = p + 1
-	t := templates.CustomerGrid(customers, strconv.Itoa(p), filter, getNotifications(r))
+	t := templates.CustomerGrid(customers, strconv.Itoa(p), filter, h.getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -62,7 +62,7 @@ func (h *Handlers) CustomerGridV2(w http.ResponseWriter, r *http.Request) {
 
 	// increment p for next page
 	p = p + 1
-	t := templates.CustomerGridV2(customers, strconv.Itoa(p), filter, getNotifications(r))
+	t := templates.CustomerGridV2(customers, strconv.Itoa(p), filter, h.getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -210,7 +210,7 @@ func (h *Handlers) CustomerUpdate(w http.ResponseWriter, r *http.Request) {
 
 	h.App.Session.Put(r.Context(), "success", "Customer updated successfully")
 
-	t := templates.CustomerUpdate(customer, getNotifications(r))
+	t := templates.CustomerUpdate(customer, h.getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -244,7 +244,7 @@ func (h *Handlers) CustomerUpdateV2(w http.ResponseWriter, r *http.Request) {
 
 	h.App.Session.Put(r.Context(), "success", "Customer updated successfully")
 
-	t := templates.CustomerUpdateV2(&customer, getNotifications(r))
+	t := templates.CustomerUpdateV2(&customer, h.getNotifications(r))
 	_ = render.Template(w, r, t)
 }
 
@@ -258,11 +258,11 @@ func (h *Handlers) CustomerDelete(w http.ResponseWriter, r *http.Request) {
 
 		// load the customer again because we normally remove the row from the UI
 		customer, _ := services.CustomerService(h.App).GetCustomerById(id)
-		t := templates.CustomerUpdate(customer, getNotifications(r))
+		t := templates.CustomerUpdate(customer, h.getNotifications(r))
 		_ = render.Template(w, r, t)
 	} else {
 		h.App.Session.Put(r.Context(), "success", "Customer deleted successfully")
-		t := templates.CustomerDelete(getNotifications(r))
+		t := templates.CustomerDelete(h.getNotifications(r))
 		_ = render.Template(w, r, t)
 	}
 }
@@ -278,11 +278,11 @@ func (h *Handlers) CustomerDeleteV2(w http.ResponseWriter, r *http.Request) {
 
 		// load the customer again because we normally remove the row from the UI
 		customer, _ := services.CustomerService(h.App).GetCustomerByIdV2(id)
-		t := templates.CustomerUpdateV2(customer, getNotifications(r))
+		t := templates.CustomerUpdateV2(customer, h.getNotifications(r))
 		_ = render.Template(w, r, t)
 	} else {
 		h.App.Session.Put(r.Context(), "success", "Customer deleted successfully")
-		t := templates.CustomerDeleteV2(getNotifications(r))
+		t := templates.CustomerDeleteV2(h.getNotifications(r))
 		_ = render.Template(w, r, t)
 	}
 }

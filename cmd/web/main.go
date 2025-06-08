@@ -31,7 +31,10 @@ func main() {
 	// close database connection pool after application has stopped
 	defer db.SQL.Close()
 
-	mux := routes()
+	// Create handlers instance with dependency
+	h := handlers.NewHandlers(&app)
+
+	mux := routes(h)
 	srv := &http.Server{
 		Addr:    app.Addr,
 		Handler: mux,
@@ -83,9 +86,7 @@ func run() (*driver.DB, error) {
 	// session.Store = pgxstore.New(db)
 	app.Session = session
 
-	// set up handlers and template rendering
-	hc := handlers.NewHandlerConfig(&app)
-	handlers.NewHandlers(hc)
+	// set up template rendering
 	render.NewRenderer(&app)
 
 	return db, nil
