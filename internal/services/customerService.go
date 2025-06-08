@@ -14,7 +14,7 @@ type CustomerService struct {
 func NewCustomerService(app *config.App) CustomerServiceInterface {
 	return &CustomerService{
 		App:          app,
-		CustomerRepo: app.Repo.CustomerRepo,
+		CustomerRepo: app.Repo.CustomerRepo, // just a shortcut to make service funcs easier to work with
 	}
 }
 
