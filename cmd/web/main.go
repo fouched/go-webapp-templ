@@ -68,6 +68,7 @@ func run() (*sql.DB, error) {
 	}
 	app.InfoLog.Println("Connected to DB")
 
+	// define the repositories that we want to use
 	app.Repo = config.Repo{
 		CustomerRepo: repo.NewCustomerRepo(db.SQL),
 		//CustomerRepo: repo.NewCustomerRepoUpperDB(db.SQL),
