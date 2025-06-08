@@ -70,6 +70,7 @@ func run() (*sql.DB, error) {
 
 	app.Repo = config.Repo{
 		CustomerRepo: repo.NewCustomerRepo(db.SQL),
+		//CustomerRepo: repo.NewCustomerRepoUpperDB(db.SQL),
 	}
 	app.InfoLog.Println("Repositories configured")
 
