@@ -3,11 +3,13 @@ package handlers
 import (
 	"github.com/fouched/go-webapp-templ/internal/config"
 	"github.com/fouched/go-webapp-templ/internal/render"
+	"github.com/gorilla/schema"
 	"net/http"
 )
 
 type Handlers struct {
-	App *config.App
+	App     *config.App
+	Decoder *schema.Decoder
 }
 
 func NewHandlers(app *config.App) *Handlers {
@@ -20,4 +22,8 @@ func (h *Handlers) getNotifications(r *http.Request) *render.Notification {
 		Warning: h.App.Session.PopString(r.Context(), "warning"),
 		Error:   h.App.Session.PopString(r.Context(), "error"),
 	}
+}
+
+func (h *Handlers) Decode(dst interface{}, src map[string][]string) error {
+	return h.Decoder.Decode(dst, src)
 }

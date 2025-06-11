@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"flag"
 	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/fouched/go-webapp-templ/internal/config"
@@ -10,6 +9,7 @@ import (
 	"github.com/fouched/go-webapp-templ/internal/handlers"
 	"github.com/fouched/go-webapp-templ/internal/render"
 	"github.com/fouched/go-webapp-templ/internal/repo"
+	"github.com/gorilla/schema"
 	"github.com/jaswdr/faker/v2"
 	"html/template"
 	"log"
@@ -19,25 +19,30 @@ import (
 	"time"
 )
 
-var app config.App
+// session - must be available in main package for middleware
 var session *scs.SessionManager
 
 func main() {
-	db, err := run()
+	app, err := newApp()
 	if err != nil {
 		log.Fatal(err)
 	}
 	// close database connection pool after application has stopped
-	defer db.Close()
+	defer app.DB.Close()
+
+	// seed the database ?
+	//seed(app.DB)
 
 	// Create handlers instance with dependency
-	h := handlers.NewHandlers(&app)
+	h := handlers.NewHandlers(app)
 
 	mux := routes(h)
 	srv := &http.Server{
 		Addr:    app.Addr,
 		Handler: mux,
 	}
+
+	app.InfoLog.Println("Starting server on", app.Addr)
 	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
@@ -45,54 +50,76 @@ func main() {
 
 }
 
-func run() (*sql.DB, error) {
-	// define complex types that will be stored in the session
-	//gob.Register(models.FooBar{})
-	//gob.Register(map[string]int{})
+func newApp() (*config.App, error) {
+	addr := ":9080"
+	dsn := "host=localhost port=5432 user=postgres password=password dbname=webapp-templ sslmode=disable"
 
-	// create the template cache
-	app.TemplateCache = make(map[string]*template.Template)
-
-	// read config
-	flag.StringVar(&app.Addr, "addr", ":9080", "Server addr to listen on")
-	flag.StringVar(&app.DSN, "dsn", "host=localhost port=5432 user=postgres password=password dbname=webapp-templ sslmode=disable", "DSN (Data Source Name)")
-
-	// init loggers
-	app.InfoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-	app.ErrorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-
-	// connect to db
-	db, err := driver.ConnectSQL(app.DSN)
+	infoLog, errorLog := initLogger()
+	db, err := initDatabase(dsn, errorLog)
 	if err != nil {
 		return nil, err
 	}
-	app.InfoLog.Println("Connected to DB")
 
-	// define the repositories that we want to use
-	app.Repo = config.Repo{
-		CustomerRepo: repo.NewCustomerRepo(db.SQL),
-		//CustomerRepo: repo.NewCustomerRepoUpperDB(db.SQL),
+	session = initSession()
+	decoder := initDecoder()
+	templates := initTemplates()
+
+	app := &config.App{
+		Addr:          addr,
+		DSN:           dsn,
+		InfoLog:       infoLog,
+		ErrorLog:      errorLog,
+		DB:            db,
+		Session:       session,
+		TemplateCache: templates,
+		Decoder:       decoder,
+		Repo: config.Repo{
+			CustomerRepo: repo.NewCustomerRepo(db),
+			//CustomerRepo: repo.NewCustomerRepoUpperDB(db.SQL), // if you want to change implementations
+		},
 	}
-	app.InfoLog.Println("Repositories configured")
-
-	// seed the database ?
-	//seed(db.SQL)
-
-	// set up session
-	session = scs.New()
-	session.Lifetime = 24 * time.Hour
-	session.Cookie.Persist = true
-	session.Cookie.SameSite = http.SameSiteLaxMode
-	// we can use persistent storage iso cookies for session data, this allows us to
-	// restart the server without users losing the login / session information
-	// https://github.com/alexedwards/scs has various options available e.g.
-	// session.Store = pgxstore.New(db)
-	app.Session = session
 
 	// set up template rendering
-	render.NewRenderer(&app)
+	render.NewRenderer(app)
 
-	return db.SQL, nil
+	return app, nil
+}
+
+func initLogger() (*log.Logger, *log.Logger) {
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	return infoLog, errorLog
+}
+
+func initDatabase(dsn string, errorLog *log.Logger) (*sql.DB, error) {
+	dbPool, err := driver.ConnectSQL(dsn)
+	if err != nil {
+		errorLog.Println("Failed to connect to DB:", err)
+		return nil, err
+	}
+	return dbPool.SQL, nil
+}
+
+func initSession() *scs.SessionManager {
+	s := scs.New()
+	s.Lifetime = 24 * time.Hour
+	s.Cookie.Persist = true
+	s.Cookie.SameSite = http.SameSiteLaxMode
+
+	//we can use persistent storage iso cookies for session data, this allows us to
+	//restart the server without users losing the login / session information
+	//https://github.com/alexedwards/scs has various options available e.g.
+	//session.Store = pgxstore.New(db)
+	return s
+}
+
+func initDecoder() *schema.Decoder {
+	return schema.NewDecoder()
+}
+
+func initTemplates() map[string]*template.Template {
+	// Can later be populated as need be
+	return make(map[string]*template.Template)
 }
 
 func seed(db *sql.DB) {

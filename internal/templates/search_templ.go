@@ -49,7 +49,7 @@ func CustomerSearch(customers []models.Customer, pageNum string, filter string) 
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<script>\r\n            document.querySelector('.grid-scroll').scrollTop=0;\r\n        </script></tbody>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<script>\n            document.querySelector('.grid-scroll').scrollTop=0;\n        </script></tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

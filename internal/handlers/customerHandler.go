@@ -62,18 +62,13 @@ func (h *Handlers) CustomerAddPost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		h.App.ErrorLog.Print(err)
-		h.App.Session.Put(r.Context(), "error", "Error parsing form for customer insert")
+		h.App.Session.Put(r.Context(), "error", "Error parsing data for customer insert")
 	}
 
-	customer := models.Customer{
-		CustomerName: r.Form.Get("customerName"),
-		Tel:          r.Form.Get("tel"),
-		Email:        r.Form.Get("email"),
-		Address1:     r.Form.Get("address1"),
-		Address2:     r.Form.Get("address2"),
-		Address3:     r.Form.Get("address3"),
-		PostCode:     r.Form.Get("postCode"),
-		UpdatedAt:    time.Now(),
+	var customer models.Customer
+	if err := h.Decode(&customer, r.PostForm); err != nil {
+		h.App.ErrorLog.Print(err)
+		h.App.Session.Put(r.Context(), "error", "Error parsing data for customer insert")
 	}
 
 	customerService := services.NewCustomerService(h.App)
